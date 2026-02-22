@@ -1,0 +1,42 @@
+{
+  "name": "app-store-connect-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for the Apple App Store Connect API — full coverage with ~73 tools",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "app-store-connect-mcp": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.27.0",
+    "node-app-store-connect-api": "^5.0.6",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "mcp",
+    "app-store-connect",
+    "apple",
+    "ios",
+    "testflight",
+    "model-context-protocol"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cankoseoglu/app-store-connect-mcp.git"
+  }
+}
