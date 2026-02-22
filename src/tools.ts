@@ -70,6 +70,14 @@ import {
   listSubscriptions,
   createSubscription,
   deleteSubscription,
+  listSubscriptionLocalizations,
+  createSubscriptionLocalization,
+  updateSubscriptionLocalization,
+  deleteSubscriptionLocalization,
+  listSubscriptionGroupLocalizations,
+  createSubscriptionGroupLocalization,
+  updateSubscriptionGroupLocalization,
+  deleteSubscriptionGroupLocalization,
 } from "./handlers/subscriptions.js";
 import {
   createReviewSubmission,
@@ -762,6 +770,98 @@ export function registerTools(server: McpServer) {
     { subscriptionId: z.string().describe("The subscription ID to delete") },
     { destructiveHint: true, openWorldHint: true },
     async (args) => handle(() => deleteSubscription(args))
+  );
+
+  // ─── 13a. SUBSCRIPTION LOCALIZATIONS ──────────────────────
+
+  server.tool(
+    "list_subscription_localizations",
+    "List localizations for a subscription (name, description per locale)",
+    {
+      subscriptionId: z.string().describe("The subscription ID"),
+      limit: z.number().optional().describe("Max results"),
+    },
+    { readOnlyHint: true, openWorldHint: true },
+    async (args) => handle(() => listSubscriptionLocalizations(args))
+  );
+
+  server.tool(
+    "create_subscription_localization",
+    "Create a localization for a subscription (name and description in a locale)",
+    {
+      subscriptionId: z.string().describe("The subscription ID"),
+      locale: z.string().describe("Locale code (e.g. en-US, fr-FR, ja)"),
+      name: z.string().describe("Localized subscription name"),
+      description: z.string().describe("Localized subscription description"),
+    },
+    { openWorldHint: true },
+    async (args) => handle(() => createSubscriptionLocalization(args))
+  );
+
+  server.tool(
+    "update_subscription_localization",
+    "Update a subscription localization's name or description",
+    {
+      subscriptionLocalizationId: z.string().describe("The subscription localization ID"),
+      name: z.string().optional().describe("Updated localized name"),
+      description: z.string().optional().describe("Updated localized description"),
+    },
+    { idempotentHint: true, openWorldHint: true },
+    async (args) => handle(() => updateSubscriptionLocalization(args))
+  );
+
+  server.tool(
+    "delete_subscription_localization",
+    "Delete a subscription localization (DESTRUCTIVE)",
+    { subscriptionLocalizationId: z.string().describe("The subscription localization ID to delete") },
+    { destructiveHint: true, idempotentHint: true, openWorldHint: true },
+    async (args) => handle(() => deleteSubscriptionLocalization(args))
+  );
+
+  // ─── 13b. SUBSCRIPTION GROUP LOCALIZATIONS ────────────────
+
+  server.tool(
+    "list_subscription_group_localizations",
+    "List localizations for a subscription group (display name per locale)",
+    {
+      subscriptionGroupId: z.string().describe("The subscription group ID"),
+      limit: z.number().optional().describe("Max results"),
+    },
+    { readOnlyHint: true, openWorldHint: true },
+    async (args) => handle(() => listSubscriptionGroupLocalizations(args))
+  );
+
+  server.tool(
+    "create_subscription_group_localization",
+    "Create a localization for a subscription group (display name in a locale)",
+    {
+      subscriptionGroupId: z.string().describe("The subscription group ID"),
+      locale: z.string().describe("Locale code (e.g. en-US, fr-FR, ja)"),
+      name: z.string().describe("Localized group display name"),
+      customAppName: z.string().optional().describe("Custom app name for this locale"),
+    },
+    { openWorldHint: true },
+    async (args) => handle(() => createSubscriptionGroupLocalization(args))
+  );
+
+  server.tool(
+    "update_subscription_group_localization",
+    "Update a subscription group localization's name or custom app name",
+    {
+      subscriptionGroupLocalizationId: z.string().describe("The subscription group localization ID"),
+      name: z.string().optional().describe("Updated localized group name"),
+      customAppName: z.string().optional().describe("Updated custom app name"),
+    },
+    { idempotentHint: true, openWorldHint: true },
+    async (args) => handle(() => updateSubscriptionGroupLocalization(args))
+  );
+
+  server.tool(
+    "delete_subscription_group_localization",
+    "Delete a subscription group localization (DESTRUCTIVE)",
+    { subscriptionGroupLocalizationId: z.string().describe("The subscription group localization ID to delete") },
+    { destructiveHint: true, idempotentHint: true, openWorldHint: true },
+    async (args) => handle(() => deleteSubscriptionGroupLocalization(args))
   );
 
   // ─── 14. REVIEW SUBMISSIONS ────────────────────────────────
