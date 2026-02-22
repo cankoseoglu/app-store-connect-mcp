@@ -7,14 +7,26 @@ export async function listApps(args: {
   const client = await getClient();
   let url = "apps";
   const params: string[] = [];
+  params.push("fields[apps]=name,bundleId");
   if (args.bundleId) params.push(`filter[bundleId]=${args.bundleId}`);
   if (args.limit) params.push(`limit=${args.limit}`);
-  if (params.length) url += "?" + params.join("&");
+  url += "?" + params.join("&");
 
   const { data } = args.limit
     ? await client.read(url)
-    : await client.readAll(url + (url.includes("?") ? "&" : "?") + "limit=200");
-  return data;
+    : await client.readAll(url + "&limit=200");
+
+  const apps = (data as any[]).map((app: any) => ({
+    id: app.id,
+    name: app.attributes?.name,
+    bundleId: app.attributes?.bundleId,
+  }));
+
+  if (apps.length === 0) {
+    return { message: "No apps found in this App Store Connect account. Create an app at https://appstoreconnect.apple.com first." };
+  }
+
+  return apps;
 }
 
 export async function getApp(args: { appId: string; include?: string[] }) {
