@@ -4,7 +4,7 @@ export async function listCiWorkflows(args: {
   productId?: string;
   limit?: number;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const params: string[] = [];
   if (args.productId) params.push(`filter[product]=${args.productId}`);
   if (args.limit) params.push(`limit=${args.limit}`);
@@ -14,7 +14,7 @@ export async function listCiWorkflows(args: {
 }
 
 export async function startCiBuild(args: { workflowId: string }) {
-  const client = getClient();
+  const client = await getClient();
   return client.create({
     type: "ciBuildRuns",
     relationships: {
@@ -27,7 +27,7 @@ export async function listCiBuildRuns(args: {
   workflowId?: string;
   limit?: number;
 }) {
-  const client = getClient();
+  const client = await getClient();
   if (args.workflowId) {
     const qs = args.limit ? `?limit=${args.limit}` : "";
     const { data } = await client.read(

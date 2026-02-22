@@ -6,7 +6,7 @@ export async function listVersions(args: {
   versionState?: string;
   limit?: number;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const params: string[] = [];
   if (args.platform) params.push(`filter[platform]=${args.platform}`);
   if (args.versionState) params.push(`filter[appStoreState]=${args.versionState}`);
@@ -20,7 +20,7 @@ export async function getVersion(args: {
   versionId: string;
   include?: string[];
 }) {
-  const client = getClient();
+  const client = await getClient();
   let url = `appStoreVersions/${args.versionId}`;
   if (args.include?.length) url += `?include=${args.include.join(",")}`;
   const { data } = await client.read(url);
@@ -34,7 +34,7 @@ export async function createVersion(args: {
   releaseType?: string;
   earliestReleaseDate?: string;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const attributes: Record<string, unknown> = {
     platform: args.platform,
     versionString: args.versionString,
@@ -56,7 +56,7 @@ export async function updateVersion(args: {
   earliestReleaseDate?: string;
   copyright?: string;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const attributes: Record<string, unknown> = {};
   if (args.versionString !== undefined) attributes.versionString = args.versionString;
   if (args.releaseType !== undefined) attributes.releaseType = args.releaseType;
@@ -71,6 +71,6 @@ export async function updateVersion(args: {
 }
 
 export async function deleteVersion(args: { versionId: string }) {
-  const client = getClient();
+  const client = await getClient();
   return client.remove({ type: "appStoreVersions", id: args.versionId });
 }

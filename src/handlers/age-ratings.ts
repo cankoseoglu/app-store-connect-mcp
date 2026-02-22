@@ -1,7 +1,7 @@
 import { getClient } from "../client.js";
 
 export async function getAgeRatingDeclaration(args: { versionId: string }) {
-  const client = getClient();
+  const client = await getClient();
   const { data } = await client.read(
     `appStoreVersions/${args.versionId}/ageRatingDeclaration`
   );
@@ -27,7 +27,7 @@ export async function updateAgeRatingDeclaration(args: {
   violenceRealistic?: string;
   violenceRealisticProlongedGraphicOrSadistic?: string;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const attributes: Record<string, unknown> = {};
 
   const fields = [

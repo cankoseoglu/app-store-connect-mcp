@@ -4,7 +4,7 @@ export async function listGameCenterLeaderboards(args: {
   appId: string;
   limit?: number;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const qs = args.limit ? `?limit=${args.limit}` : "";
   const { data } = await client.read(
     `apps/${args.appId}/gameCenterDetail`, { version: 1 }
@@ -38,7 +38,7 @@ export async function createGameCenterLeaderboard(args: {
   recurrenceDuration?: string;
   recurrenceRule?: string;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const attributes: Record<string, unknown> = {
     referenceName: args.referenceName,
     vendorIdentifier: args.vendorIdentifier,
@@ -67,7 +67,7 @@ export async function listGameCenterAchievements(args: {
   appId: string;
   limit?: number;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const { data } = await client.read(
     `apps/${args.appId}/gameCenterDetail`, { version: 1 }
   );
@@ -93,7 +93,7 @@ export async function createGameCenterAchievement(args: {
   showBeforeEarned: boolean;
   repeatable: boolean;
 }) {
-  const client = getClient();
+  const client = await getClient();
   return client.create({
     type: "gameCenterAchievements",
     attributes: {

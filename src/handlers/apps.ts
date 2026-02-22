@@ -4,7 +4,7 @@ export async function listApps(args: {
   bundleId?: string;
   limit?: number;
 }) {
-  const client = getClient();
+  const client = await getClient();
   let url = "apps";
   const params: string[] = [];
   if (args.bundleId) params.push(`filter[bundleId]=${args.bundleId}`);
@@ -18,7 +18,7 @@ export async function listApps(args: {
 }
 
 export async function getApp(args: { appId: string; include?: string[] }) {
-  const client = getClient();
+  const client = await getClient();
   let url = `apps/${args.appId}`;
   if (args.include?.length) url += `?include=${args.include.join(",")}`;
   const { data } = await client.read(url);
@@ -31,7 +31,7 @@ export async function updateApp(args: {
   contentRightsDeclaration?: string;
   availableInNewTerritories?: boolean;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const attributes: Record<string, unknown> = {};
   if (args.primaryLocale !== undefined) attributes.primaryLocale = args.primaryLocale;
   if (args.contentRightsDeclaration !== undefined)

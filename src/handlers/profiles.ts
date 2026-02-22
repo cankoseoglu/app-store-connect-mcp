@@ -6,7 +6,7 @@ export async function listProfiles(args: {
   profileState?: string;
   limit?: number;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const params: string[] = [];
   if (args.profileType) params.push(`filter[profileType]=${args.profileType}`);
   if (args.name) params.push(`filter[name]=${args.name}`);
@@ -24,7 +24,7 @@ export async function createProfile(args: {
   certificateIds: string[];
   deviceIds?: string[];
 }) {
-  const client = getClient();
+  const client = await getClient();
   const relationships: Record<string, unknown> = {
     bundleId: { data: { type: "bundleIds", id: args.bundleIdId } },
     certificates: {
@@ -45,6 +45,6 @@ export async function createProfile(args: {
 }
 
 export async function deleteProfile(args: { profileId: string }) {
-  const client = getClient();
+  const client = await getClient();
   return client.remove({ type: "profiles", id: args.profileId });
 }

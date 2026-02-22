@@ -5,7 +5,7 @@ export async function listBundleIds(args: {
   platform?: string;
   limit?: number;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const params: string[] = [];
   if (args.identifier) params.push(`filter[identifier]=${args.identifier}`);
   if (args.platform) params.push(`filter[platform]=${args.platform}`);
@@ -19,7 +19,7 @@ export async function getBundleId(args: {
   bundleIdId: string;
   include?: string[];
 }) {
-  const client = getClient();
+  const client = await getClient();
   let url = `bundleIds/${args.bundleIdId}`;
   if (args.include?.length) url += `?include=${args.include.join(",")}`;
   const { data } = await client.read(url);
@@ -32,7 +32,7 @@ export async function registerBundleId(args: {
   platform: string;
   seedId?: string;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const attributes: Record<string, unknown> = {
     identifier: args.identifier,
     name: args.name,
@@ -51,7 +51,7 @@ export async function enableCapability(args: {
   capabilityType: string;
   settings?: Array<{ key: string; options: Array<{ key: string; enabled: boolean }> }>;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const attributes: Record<string, unknown> = {
     capabilityType: args.capabilityType,
   };
@@ -67,6 +67,6 @@ export async function enableCapability(args: {
 }
 
 export async function disableCapability(args: { capabilityId: string }) {
-  const client = getClient();
+  const client = await getClient();
   return client.remove({ type: "bundleIdCapabilities", id: args.capabilityId });
 }

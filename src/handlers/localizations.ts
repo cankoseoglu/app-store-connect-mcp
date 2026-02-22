@@ -4,7 +4,7 @@ export async function listLocalizations(args: {
   versionId: string;
   limit?: number;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const qs = args.limit ? `?limit=${args.limit}` : "";
   const { data } = await client.read(
     `appStoreVersions/${args.versionId}/appStoreVersionLocalizations${qs}`
@@ -13,7 +13,7 @@ export async function listLocalizations(args: {
 }
 
 export async function getLocalization(args: { localizationId: string }) {
-  const client = getClient();
+  const client = await getClient();
   const { data } = await client.read(
     `appStoreVersionLocalizations/${args.localizationId}`
   );
@@ -30,7 +30,7 @@ export async function createLocalization(args: {
   marketingUrl?: string;
   supportUrl?: string;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const attributes: Record<string, unknown> = { locale: args.locale };
   if (args.description !== undefined) attributes.description = args.description;
   if (args.keywords !== undefined) attributes.keywords = args.keywords;
@@ -60,7 +60,7 @@ export async function updateLocalization(args: {
   marketingUrl?: string;
   supportUrl?: string;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const attributes: Record<string, unknown> = {};
   if (args.description !== undefined) attributes.description = args.description;
   if (args.keywords !== undefined) attributes.keywords = args.keywords;

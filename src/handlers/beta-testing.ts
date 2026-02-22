@@ -4,7 +4,7 @@ export async function listBetaGroups(args: {
   appId: string;
   limit?: number;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const params: string[] = [`filter[app]=${args.appId}`];
   if (args.limit) params.push(`limit=${args.limit}`);
   const { data } = await client.read(`betaGroups?${params.join("&")}`);
@@ -19,7 +19,7 @@ export async function createBetaGroup(args: {
   publicLinkLimit?: number;
   feedbackEnabled?: boolean;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const attributes: Record<string, unknown> = { name: args.name };
   if (args.isInternalGroup !== undefined) attributes.isInternalGroup = args.isInternalGroup;
   if (args.publicLinkEnabled !== undefined) attributes.publicLinkEnabled = args.publicLinkEnabled;
@@ -34,7 +34,7 @@ export async function createBetaGroup(args: {
 }
 
 export async function deleteBetaGroup(args: { betaGroupId: string }) {
-  const client = getClient();
+  const client = await getClient();
   return client.remove({ type: "betaGroups", id: args.betaGroupId });
 }
 
@@ -44,7 +44,7 @@ export async function listBetaTesters(args: {
   appId?: string;
   limit?: number;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const params: string[] = [];
   if (args.email) params.push(`filter[email]=${args.email}`);
   if (args.betaGroupId) params.push(`filter[betaGroups]=${args.betaGroupId}`);
@@ -59,7 +59,7 @@ export async function addTesterToGroup(args: {
   betaGroupId: string;
   betaTesterId: string;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const response = await client.fetch(`betaGroups/${args.betaGroupId}/relationships/betaTesters`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -78,7 +78,7 @@ export async function removeTesterFromGroup(args: {
   betaGroupId: string;
   betaTesterId: string;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const response = await client.fetch(`betaGroups/${args.betaGroupId}/relationships/betaTesters`, {
     method: "DELETE",
     headers: { "Content-Type": "application/json" },
@@ -94,7 +94,7 @@ export async function removeTesterFromGroup(args: {
 }
 
 export async function submitForBetaReview(args: { buildId: string }) {
-  const client = getClient();
+  const client = await getClient();
   return client.create({
     type: "betaAppReviewSubmissions",
     relationships: {

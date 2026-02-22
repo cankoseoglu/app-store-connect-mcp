@@ -7,7 +7,7 @@ export async function listCustomerReviews(args: {
   sort?: string;
   limit?: number;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const params: string[] = [];
   if (args.rating) params.push(`filter[rating]=${args.rating}`);
   if (args.territory) params.push(`filter[territory]=${args.territory}`);
@@ -19,7 +19,7 @@ export async function listCustomerReviews(args: {
 }
 
 export async function getCustomerReview(args: { reviewId: string }) {
-  const client = getClient();
+  const client = await getClient();
   const { data } = await client.read(`customerReviews/${args.reviewId}`);
   return data;
 }
@@ -28,7 +28,7 @@ export async function createReviewResponse(args: {
   reviewId: string;
   responseBody: string;
 }) {
-  const client = getClient();
+  const client = await getClient();
   return client.create({
     type: "customerReviewResponses",
     attributes: { responseBody: args.responseBody },

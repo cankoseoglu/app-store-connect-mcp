@@ -29,14 +29,21 @@ export interface ASCClient {
 }
 
 let clientInstance: ASCClient | null = null;
+let clientCreatedAt: number | null = null;
 
-export function getClient(): ASCClient {
-  if (!clientInstance) {
-    throw new Error(
-      "ASC client not initialized. Ensure APP_STORE_CONNECT_ISSUER_ID, APP_STORE_CONNECT_KEY_ID, and APP_STORE_CONNECT_PRIVATE_KEY are set."
-    );
+// Token expires after 20 minutes; refresh after 15 to leave buffer
+const TOKEN_MAX_AGE_MS = 15 * 60 * 1000;
+
+function isTokenExpired(): boolean {
+  if (!clientCreatedAt) return true;
+  return Date.now() - clientCreatedAt > TOKEN_MAX_AGE_MS;
+}
+
+export async function getClient(): Promise<ASCClient> {
+  if (!clientInstance || isTokenExpired()) {
+    await initClient();
   }
-  return clientInstance;
+  return clientInstance!;
 }
 
 export async function initClient(): Promise<ASCClient> {
@@ -67,6 +74,8 @@ export async function initClient(): Promise<ASCClient> {
     apiKey,
     privateKey,
   })) as unknown as ASCClient;
+
+  clientCreatedAt = Date.now();
 
   return clientInstance;
 }

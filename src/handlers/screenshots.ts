@@ -3,7 +3,7 @@ import { basename, resolve } from "node:path";
 import { getClient } from "../client.js";
 
 export async function listScreenshotSets(args: { localizationId: string }) {
-  const client = getClient();
+  const client = await getClient();
   const { data } = await client.read(
     `appStoreVersionLocalizations/${args.localizationId}/appScreenshotSets`
   );
@@ -14,7 +14,7 @@ export async function createScreenshotSet(args: {
   localizationId: string;
   screenshotDisplayType: string;
 }) {
-  const client = getClient();
+  const client = await getClient();
   return client.create({
     type: "appScreenshotSets",
     attributes: { screenshotDisplayType: args.screenshotDisplayType },
@@ -30,7 +30,7 @@ export async function uploadScreenshot(args: {
   screenshotSetId: string;
   filePath: string;
 }) {
-  const client = getClient();
+  const client = await getClient();
 
   // Sanitize and resolve path
   const safePath = resolve(args.filePath);
@@ -58,12 +58,12 @@ export async function uploadScreenshot(args: {
 }
 
 export async function deleteScreenshot(args: { screenshotId: string }) {
-  const client = getClient();
+  const client = await getClient();
   return client.remove({ type: "appScreenshots", id: args.screenshotId });
 }
 
 export async function listPreviewSets(args: { localizationId: string }) {
-  const client = getClient();
+  const client = await getClient();
   const { data } = await client.read(
     `appStoreVersionLocalizations/${args.localizationId}/appPreviewSets`
   );
@@ -75,7 +75,7 @@ export async function uploadPreview(args: {
   filePath: string;
   mimeType?: string;
 }) {
-  const client = getClient();
+  const client = await getClient();
 
   const safePath = resolve(args.filePath);
   const fileName = basename(safePath);

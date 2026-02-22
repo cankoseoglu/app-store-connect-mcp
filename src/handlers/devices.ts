@@ -6,7 +6,7 @@ export async function listDevices(args: {
   name?: string;
   limit?: number;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const params: string[] = [];
   if (args.platform) params.push(`filter[platform]=${args.platform}`);
   if (args.status) params.push(`filter[status]=${args.status}`);
@@ -22,7 +22,7 @@ export async function registerDevice(args: {
   udid: string;
   platform: string;
 }) {
-  const client = getClient();
+  const client = await getClient();
   return client.create({
     type: "devices",
     attributes: {

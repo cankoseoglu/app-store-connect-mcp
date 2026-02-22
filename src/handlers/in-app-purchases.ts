@@ -6,7 +6,7 @@ export async function listInAppPurchases(args: {
   filterState?: string;
   limit?: number;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const params: string[] = [];
   if (args.filterProductId) params.push(`filter[productId]=${args.filterProductId}`);
   if (args.filterState) params.push(`filter[state]=${args.filterState}`);
@@ -20,7 +20,7 @@ export async function getInAppPurchase(args: {
   inAppPurchaseId: string;
   include?: string[];
 }) {
-  const client = getClient();
+  const client = await getClient();
   let url = `inAppPurchases/${args.inAppPurchaseId}`;
   if (args.include?.length) url += `?include=${args.include.join(",")}`;
   const { data } = await client.read(url, { version: 2 });
@@ -34,7 +34,7 @@ export async function createInAppPurchase(args: {
   inAppPurchaseType: string;
   reviewNote?: string;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const attributes: Record<string, unknown> = {
     name: args.name,
     productId: args.productId,
@@ -51,7 +51,7 @@ export async function createInAppPurchase(args: {
 }
 
 export async function deleteInAppPurchase(args: { inAppPurchaseId: string }) {
-  const client = getClient();
+  const client = await getClient();
   return client.remove(
     { type: "inAppPurchases", id: args.inAppPurchaseId },
     { version: 2 }

@@ -7,7 +7,7 @@ export async function listBuilds(args: {
   preReleaseVersion?: string;
   limit?: number;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const params: string[] = [`filter[app]=${args.appId}`];
   if (args.version) params.push(`filter[version]=${args.version}`);
   if (args.processingState) params.push(`filter[processingState]=${args.processingState}`);
@@ -23,7 +23,7 @@ export async function getBuild(args: {
   buildId: string;
   include?: string[];
 }) {
-  const client = getClient();
+  const client = await getClient();
   let url = `builds/${args.buildId}`;
   if (args.include?.length) url += `?include=${args.include.join(",")}`;
   const { data } = await client.read(url);
@@ -35,7 +35,7 @@ export async function updateBuild(args: {
   expired?: boolean;
   usesNonExemptEncryption?: boolean;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const attributes: Record<string, unknown> = {};
   if (args.expired !== undefined) attributes.expired = args.expired;
   if (args.usesNonExemptEncryption !== undefined)

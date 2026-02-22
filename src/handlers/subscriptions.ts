@@ -4,7 +4,7 @@ export async function listSubscriptionGroups(args: {
   appId: string;
   limit?: number;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const qs = args.limit ? `?limit=${args.limit}` : "";
   const { data } = await client.read(
     `apps/${args.appId}/subscriptionGroups${qs}`
@@ -16,7 +16,7 @@ export async function createSubscriptionGroup(args: {
   appId: string;
   referenceName: string;
 }) {
-  const client = getClient();
+  const client = await getClient();
   return client.create({
     type: "subscriptionGroups",
     attributes: { referenceName: args.referenceName },
@@ -28,7 +28,7 @@ export async function listSubscriptions(args: {
   subscriptionGroupId: string;
   limit?: number;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const qs = args.limit ? `?limit=${args.limit}` : "";
   const { data } = await client.read(
     `subscriptionGroups/${args.subscriptionGroupId}/subscriptions${qs}`
@@ -45,7 +45,7 @@ export async function createSubscription(args: {
   reviewNote?: string;
   groupLevel?: number;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const attributes: Record<string, unknown> = {
     name: args.name,
     productId: args.productId,
@@ -67,6 +67,6 @@ export async function createSubscription(args: {
 }
 
 export async function deleteSubscription(args: { subscriptionId: string }) {
-  const client = getClient();
+  const client = await getClient();
   return client.remove({ type: "subscriptions", id: args.subscriptionId });
 }

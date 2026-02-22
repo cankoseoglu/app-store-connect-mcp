@@ -5,7 +5,7 @@ export async function listUsers(args: {
   username?: string;
   limit?: number;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const params: string[] = [];
   if (args.role) params.push(`filter[roles]=${args.role}`);
   if (args.username) params.push(`filter[username]=${args.username}`);
@@ -16,7 +16,7 @@ export async function listUsers(args: {
 }
 
 export async function getUser(args: { userId: string }) {
-  const client = getClient();
+  const client = await getClient();
   const { data } = await client.read(`users/${args.userId}`);
   return data;
 }
@@ -26,7 +26,7 @@ export async function updateUserRoles(args: {
   roles: string[];
   allAppsVisible?: boolean;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const attributes: Record<string, unknown> = { roles: args.roles };
   if (args.allAppsVisible !== undefined) attributes.allAppsVisible = args.allAppsVisible;
 
@@ -37,6 +37,6 @@ export async function updateUserRoles(args: {
 }
 
 export async function removeUser(args: { userId: string }) {
-  const client = getClient();
+  const client = await getClient();
   return client.remove({ type: "users", id: args.userId });
 }

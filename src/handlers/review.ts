@@ -4,7 +4,7 @@ export async function createReviewSubmission(args: {
   appId: string;
   platform: string;
 }) {
-  const client = getClient();
+  const client = await getClient();
   return client.create({
     type: "reviewSubmissions",
     attributes: { platform: args.platform },
@@ -18,7 +18,7 @@ export async function listReviewSubmissions(args: {
   state?: string;
   limit?: number;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const params: string[] = [`filter[app]=${args.appId}`];
   if (args.platform) params.push(`filter[platform]=${args.platform}`);
   if (args.state) params.push(`filter[state]=${args.state}`);

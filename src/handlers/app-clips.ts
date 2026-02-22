@@ -4,7 +4,7 @@ export async function listAppClipDefaultExperiences(args: {
   appClipId: string;
   limit?: number;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const qs = args.limit ? `?limit=${args.limit}` : "";
   const { data } = await client.read(
     `appClips/${args.appClipId}/appClipDefaultExperiences${qs}`
@@ -16,7 +16,7 @@ export async function updateAppClipDefaultExperience(args: {
   appClipDefaultExperienceId: string;
   action?: string;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const attributes: Record<string, unknown> = {};
   if (args.action !== undefined) attributes.action = args.action;
 

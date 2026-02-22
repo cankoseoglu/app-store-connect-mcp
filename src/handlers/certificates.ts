@@ -5,7 +5,7 @@ export async function listCertificates(args: {
   displayName?: string;
   limit?: number;
 }) {
-  const client = getClient();
+  const client = await getClient();
   const params: string[] = [];
   if (args.certificateType) params.push(`filter[certificateType]=${args.certificateType}`);
   if (args.displayName) params.push(`filter[displayName]=${args.displayName}`);
@@ -16,12 +16,12 @@ export async function listCertificates(args: {
 }
 
 export async function getCertificate(args: { certificateId: string }) {
-  const client = getClient();
+  const client = await getClient();
   const { data } = await client.read(`certificates/${args.certificateId}`);
   return data;
 }
 
 export async function revokeCertificate(args: { certificateId: string }) {
-  const client = getClient();
+  const client = await getClient();
   return client.remove({ type: "certificates", id: args.certificateId });
 }
